@@ -19,13 +19,24 @@ function createWindow() {
     titleBarStyle: 'default' // 使用默认标题栏样式
   })
 
+  // 添加F12快捷键打开开发者工具
+  mainWindow.webContents.on('before-input-event', (event, input) => {
+    if (input.key === 'F12') {
+      mainWindow.webContents.toggleDevTools()
+      event.preventDefault()
+    }
+  })
+
   // 开发环境加载Vite服务器
   if (process.env.NODE_ENV === 'development') {
     mainWindow.loadURL('http://localhost:5173')
     mainWindow.webContents.openDevTools()
   } else {
     // 生产环境加载打包后的文件
-    mainWindow.loadFile(path.join(__dirname, '../dist/index.html'))
+    const htmlPath = path.join(__dirname, '../dist/index.html')
+    console.log('Loading:', htmlPath)
+    console.log('File exists:', fs.existsSync(htmlPath))
+    mainWindow.loadFile(htmlPath)
   }
 }
 
