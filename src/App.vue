@@ -4,6 +4,7 @@ import { ElMessage, ElMessageBox } from 'element-plus'
 import FileUpload from './components/FileUpload.vue'
 import DirectoryPicker from './components/DirectoryPicker.vue'
 import PlayerList from './components/PlayerList.vue'
+import stardewLogo from './assets/image/Stardew_logo_4x.png'
 import { parseXML, buildXML, extractPlayersInfo, migrateHost, updateSaveGameInfo, fixNullableFields } from './utils/xmlParser'
 import { readFileAsText, exportSaveFile, validateSaveFile, validateSaveGameInfo, getEnvironment, loadSaveFromDirectory, saveFileDirectly } from './utils/fileHandler'
 
@@ -223,23 +224,22 @@ const handleMigrateHost = async (farmhandIndex) => {
 <template>
   <div class="app-container" v-loading="loading">
     <div class="header">
-      <h1>🌾 星露谷物语 - 存档编辑器</h1>
-      <p class="subtitle">
-        主机迁移工具
-        <el-tag 
-          :type="currentEnvironment === 'electron' ? 'success' : 'info'" 
-          size="small" 
-          style="margin-left: 10px"
-        >
-          {{ currentEnvironment === 'electron' ? '🖥️ 桌面版' : '🌐 网页版' }}
-        </el-tag>
-      </p>
+      <img
+        class="header-logo"
+        :src="stardewLogo"
+        :srcset="`${stardewLogo} 2x`"
+        alt="Stardew Valley Save Editor"
+      />
+      <div class="title-box">
+        <p class="title">星露谷物语 - 存档迁移器</p>
+      </div>
     </div>
 
     <div class="content">
       <!-- Electron环境：使用目录选择器 -->
       <div v-if="currentEnvironment === 'electron'">
-        <el-card shadow="hover" style="margin-bottom: 20px;">
+        <div class="content-frame" style="margin-bottom: 20px;">
+          <el-card shadow="hover">
           <template #header>
             <div class="card-header">
               <span>选择存档目录</span>
@@ -248,12 +248,14 @@ const handleMigrateHost = async (farmhandIndex) => {
           </template>
           <DirectoryPicker @directory-selected="handleDirectorySelected" />
         </el-card>
+        </div>
       </div>
 
       <!-- 浏览器环境：使用文件上传 -->
       <el-row v-else :gutter="20">
         <el-col :span="12">
-          <el-card shadow="hover">
+          <div class="content-frame">
+            <el-card shadow="hover">
             <template #header>
               <div class="card-header">
                 <span>1. 上传主存档</span>
@@ -261,11 +263,13 @@ const handleMigrateHost = async (farmhandIndex) => {
               </div>
             </template>
             <FileUpload @file-loaded="handleFileLoaded" />
-          </el-card>
+            </el-card>
+          </div>
         </el-col>
         
         <el-col :span="12">
-          <el-card shadow="hover">
+          <div class="content-frame">
+            <el-card shadow="hover">
             <template #header>
               <div class="card-header">
                 <span>2. 上传SaveGameInfo（可选但推荐）</span>
@@ -273,7 +277,8 @@ const handleMigrateHost = async (farmhandIndex) => {
               </div>
             </template>
             <FileUpload @file-loaded="handleSaveInfoLoaded" accept-text="SaveGameInfo" />
-          </el-card>
+            </el-card>
+          </div>
         </el-col>
       </el-row>
       
@@ -319,22 +324,64 @@ const handleMigrateHost = async (farmhandIndex) => {
   margin-bottom: 40px;
 }
 
-.header h1 {
-  font-size: 32px;
+.title-box {
+  display: inline-flex;
+  align-items: center;
+  padding: 5px 9px;
+  margin: 0 auto 5px;
+  border: 20px solid transparent;
+  border-image: url("./assets/image/scrollborder.png") 24 fill repeat;
+}
+
+.title-box .title {
+  font-size: 22px;
   color: #303133;
-  margin: 0 0 8px 0;
+  margin: 0;
   font-weight: 600;
 }
 
-.subtitle {
-  font-size: 16px;
-  color: #909399;
-  margin: 0;
+
+.header-logo {
+  display: block;
+  width: auto;
+  height: auto;
+  margin: 0 auto 12px;
+  image-rendering: pixelated;
 }
+
+
 
 .content {
   margin-bottom: 40px;
 }
+
+.content-frame {
+  border: 24px solid transparent;
+  border-image: url("./assets/image/woodenboxborder.png") 24 stretch;
+  border-radius: 15px;
+  padding: 0;
+  background-color: #fff6d4;
+
+}
+
+.content-frame .el-card {
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  background: transparent;
+}
+
+.content-frame .el-card__header,
+.content-frame .el-card__body {
+  padding: 16px;
+}
+::v-deep .el-upload-dragger  {
+  background-color: #fff6d4 ;
+}
+::v-deep .el-icon--upload {
+    color: #c19b10;
+  }
+
 
 .card-header {
   display: flex;

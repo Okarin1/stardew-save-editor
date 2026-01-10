@@ -13,8 +13,13 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-attachment: fixed;
+  background-color: #f6fafe;
+  background-image: url("./assets/image/bottom_bg5.png"), url("./assets/image/stars3.png"),
+    linear-gradient(#072b74, #0e75f0, #0eb6ff, #74f1e9, #ddffd8);
+  background-position: center bottom, center top, left top;
+  background-repeat: repeat-x, repeat-x, no-repeat;
+  background-size: auto, auto, cover;
+  background-attachment: scroll, scroll, fixed;
 }
 
 #app {

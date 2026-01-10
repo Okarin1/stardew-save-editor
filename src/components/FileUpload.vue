@@ -8,7 +8,7 @@
       :on-change="handleFileChange"
       accept="*"
     >
-      <el-icon class="el-icon--upload"><UploadFilled /></el-icon>
+      <img class="upload-icon" :src="uploadIcon" alt="upload" />
       <div class="el-upload__text">
         拖拽{{ acceptText }}文件到此处，或<em>点击选择</em>
       </div>
@@ -32,8 +32,9 @@
 
 <script setup>
 import { ref, computed } from 'vue'
-import { Upload, UploadFilled, Document } from '@element-plus/icons-vue'
+import { Upload, Document } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
+import uploadIcon from '../assets/image/upload.png'
 
 const props = defineProps({
   acceptText: {
@@ -97,9 +98,9 @@ const handleFileChange = (uploadFile) => {
   padding: 40px 20px;
 }
 
-.el-icon--upload {
-  font-size: 67px;
-  color: #409eff;
+.upload-icon {
+  width: 72px;
+  height: auto;
   margin-bottom: 16px;
 }
 
