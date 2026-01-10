@@ -13,11 +13,41 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  background-attachment: fixed;
+  background-color: #f6fafe;
+  background-image: url("./assets/image/bottom_bg5.png"), url("./assets/image/stars3.png"),
+    linear-gradient(#072b74, #0e75f0, #0eb6ff, #74f1e9, #ddffd8);
+  background-position: center bottom, center top, left top;
+  background-repeat: repeat-x, repeat-x, no-repeat;
+  background-size: auto, auto, cover;
+  background-attachment: scroll, scroll, fixed;
 }
 
 #app {
   width: 100%;
   min-height: 100vh;
+}
+
+.loading-mask {
+  position: absolute;
+  inset: 0;
+  background: #fff6d4e7;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 2;
+}
+
+.loading-mask__img {
+  width: 80%;
+  height: auto;
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+  image-rendering: pixelated;
+}
+
+.locked-tip {
+  background-color: #fef0f0;
+  color: #f56c6c;
+  border: 1px solid #fbc4c4;
 }
