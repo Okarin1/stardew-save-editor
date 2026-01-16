@@ -215,6 +215,7 @@ export function extractPlayersInfo(saveData) {
  * @returns {object} 修改后的存档数据
  */
 export function migrateHost(saveData, farmhandIndex) {
+  debugger;
   try {
     const newSaveData = JSON.parse(JSON.stringify(saveData)); // 深拷贝
     const gameSave = newSaveData.SaveGame;
@@ -269,7 +270,15 @@ export function migrateHost(saveData, farmhandIndex) {
 
     // 交换玩家数据
     // 6. 将当前主机降级为农场工人
-    gameSave.farmhands.Farmer[farmhandIndex] = currentHost;
+    
+    // 如果原本是单个对象（非数组），需要直接修改 gameSave.farmhands.Farmer
+    // 否则修改 farmhandArray 即可（因为它与 farmhandsData 是同一引用）
+    if (Array.isArray(farmhandsData)) {
+      farmhandArray[farmhandIndex] = currentHost;
+    } else {
+      // 单个农民的情况，直接替换
+      gameSave.farmhands.Farmer = currentHost;
+    }
 
     // 7. 将目标农场工人提升为主机
     gameSave.player = targetFarmhand;
