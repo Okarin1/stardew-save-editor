@@ -5,6 +5,7 @@ const parserOptions = {
   ignoreAttributes: false,
   attributeNamePrefix: "@_",
   textNodeName: "#text",
+  parseTagValue: false,
   parseAttributeValue: false,
   trimValues: true,
   processEntities: false,
@@ -179,11 +180,11 @@ export function extractPlayersInfo(saveData) {
 
       farmhandArray.forEach((farmhand, index) => {
         // 过滤掉空数据或没有名字的玩家（离线玩家槽位）
-        if (farmhand && farmhand.name && typeof farmhand.name === "string") {
+        if (farmhand && farmhand.name != null) {
           farmhands.push({
             type: "farmhand",
             index,
-            name: farmhand.name,
+            name: String(farmhand.name),
             farmName: farmhand.farmName,
             uniqueMultiplayerID: farmhand.UniqueMultiplayerID,
             money: farmhand.money,
