@@ -264,10 +264,30 @@ export function migrateHost(saveData, farmhandIndex) {
     currentHost.eventsSeen = targetFarmhand.eventsSeen;
     targetFarmhand.eventsSeen = tempEventsSeen;
 
-    // 5. 交换邮件记录（解决矿车、巴士、桥梁等基础设施访问问题）
-    const tempMailReceived = currentHost.mailReceived;
-    currentHost.mailReceived = targetFarmhand.mailReceived;
-    targetFarmhand.mailReceived = tempMailReceived;
+    // 5. 合并邮件记录（解决矿车、巴士、桥梁等基础设施访问问题，同时避免丢邮件）
+    function normalizeMailReceived(mailReceived) {
+      if (!mailReceived) return [];
+      if (Array.isArray(mailReceived)) return mailReceived;
+      if (typeof mailReceived === "object" && mailReceived.item != null) {
+        return Array.isArray(mailReceived.item)
+          ? mailReceived.item
+          : [mailReceived.item];
+      }
+      return [mailReceived];
+    }
+
+    function buildMailReceived(uniqueItems, originalShape) {
+      // Preserve the typical Stardew Save shape: { item: [...] }
+      if (originalShape && typeof originalShape === "object" && !Array.isArray(originalShape)) {
+        return { item: uniqueItems.length === 1 ? uniqueItems[0] : uniqueItems };
+      }
+      return uniqueItems.length === 1 ? uniqueItems[0] : uniqueItems;
+    }
+
+    const hostMailItems = normalizeMailReceived(currentHost.mailReceived);
+    const farmhandMailItems = normalizeMailReceived(targetFarmhand.mailReceived);
+    const mailUnion = Array.from(new Set([...hostMailItems, ...farmhandMailItems]));
+    currentHost.mailReceived = buildMailReceived(mailUnion, currentHost.mailReceived);
 
     // 交换玩家数据
     // 6. 将当前主机降级为农场工人
